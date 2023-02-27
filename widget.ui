@@ -31,16 +31,9 @@
      </widget>
     </item>
     <item>
-     <widget class="QToolButton" name="btnNext">
+     <widget class="QToolButton" name="btnPrev">
       <property name="text">
-       <string>next</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QToolButton" name="btnPause">
-      <property name="text">
-       <string>pause</string>
+       <string>prev</string>
       </property>
      </widget>
     </item>
@@ -52,16 +45,9 @@
      </widget>
     </item>
     <item>
-     <widget class="QToolButton" name="btnPrev">
+     <widget class="QToolButton" name="btnNext">
       <property name="text">
-       <string>prev</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QToolButton" name="btnStop">
-      <property name="text">
-       <string>stop</string>
+       <string>next</string>
       </property>
      </widget>
     </item>

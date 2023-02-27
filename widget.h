@@ -19,12 +19,16 @@ class Widget : public QWidget
 
 public:
     Widget(QWidget *parent = nullptr);
+    void setDefault();
     ~Widget();
 
 private slots:
     void btnAddClicked();
     void btnPlay();
-    void btnPause();
+//    void btnPause();
+    void btnNext();
+    void btnPrev();
+//    void btnStop();
 
 private:
     Ui::Widget          *ui;
@@ -32,6 +36,9 @@ private:
     QMediaPlayer        *_player;
     QAudioOutput        *_audioOutput;
     LinkedList          _playlist;
+    uint32_t            _index;
+//    qint64              _pos;
+    int                 _playState; // 1-play, 0-pause
 
 //    QMediaPlaylist      *_playlist;
 };
