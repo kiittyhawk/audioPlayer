@@ -7,6 +7,7 @@
 #include <QAudioOutput>
 #include "LinkedList.h"
 #include <QDebug>
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -29,12 +30,14 @@ private slots:
     void setVolume(int value);
     void audioLoop(QMediaPlayer::MediaStatus status);
     void setAudio(QModelIndex index);
+    void durationEmul();
 
 private:
     Ui::Widget          *ui;
     QStandardItemModel  *_playlistModel;
     QMediaPlayer        *_player;
     QAudioOutput        *_audioOutput;
+    QTimer              *_timer;
     LinkedList          _playlist;
     uint32_t            _index;
     int                 _playState; // 1-play, 0-pause

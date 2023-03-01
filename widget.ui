@@ -19,23 +19,10 @@
      <x>80</x>
      <y>350</y>
      <width>441</width>
-     <height>52</height>
+     <height>61</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QToolButton" name="btnPrev">
-      <property name="minimumSize">
-       <size>
-        <width>100</width>
-        <height>50</height>
-       </size>
-      </property>
-      <property name="text">
-       <string>prev</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="1">
      <widget class="QToolButton" name="btnPlay">
       <property name="minimumSize">
@@ -46,6 +33,19 @@
       </property>
       <property name="text">
        <string>play</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QToolButton" name="btnPrev">
+      <property name="minimumSize">
+       <size>
+        <width>100</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>prev</string>
       </property>
      </widget>
     </item>
@@ -117,19 +117,6 @@
     <enum>Qt::Vertical</enum>
    </property>
   </widget>
-  <widget class="QSlider" name="horizontalSlider">
-   <property name="geometry">
-    <rect>
-     <x>140</x>
-     <y>310</y>
-     <width>321</width>
-     <height>20</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-  </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
@@ -142,6 +129,39 @@
    <property name="text">
     <string>Volume</string>
    </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>80</x>
+     <y>300</y>
+     <width>441</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QLabel" name="currentTime">
+      <property name="text">
+       <string>0:0</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QSlider" name="playingTrack">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="endTime">
+      <property name="text">
+       <string>0:0</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>
