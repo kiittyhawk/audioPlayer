@@ -16,18 +16,24 @@ Widget::Widget(QWidget *parent)
     ui->playlistView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->playlistView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->playlistView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->playlistView->setContextMenuPolicy(Qt::CustomContextMenu);
+    setWindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
+    setWindowTitle("Audio Player");
     ui->playlistView->horizontalHeader()->setStretchLastSection(true);
     ui->verticalSlider->setMinimum(0);
     ui->verticalSlider->setMaximum(100);
     ui->verticalSlider->setValue(30);
     ui->playingTrack->setTickInterval(1);
 
+
     _player = new QMediaPlayer(this);
     _audioOutput = new QAudioOutput();
+
     _player->setAudioOutput(_audioOutput);
     _audioOutput->setVolume(0.3f);
     _index = 0;
     _playState = -1;
+    addDefaultTracks();
 
     _timer = new QTimer(this);
     connect(_timer, SIGNAL(timeout()), this, SLOT(durationEmul()));
@@ -56,6 +62,10 @@ QString convertTime(qint64 seconds)
 {
     QString min = QString::number(seconds / 60);
     QString sec = QString::number(seconds % 60);
+    if ((seconds / 60) >= 0 && (seconds / 60) < 10)
+        min = "0" + min;
+    if ((seconds % 60) >= 0 && (seconds % 60) < 10)
+        sec = "0" + sec;
     return (min + ":" + sec);
 }
 
@@ -64,9 +74,11 @@ void Widget::durationEmul()
 //    std::time_t tt = static_cast<time_t>(_player->duration()/1000);
     if (!_playlist[_index] || _index == (uint32_t)-1) return;
 //    std::cout << static_cast<time_t>(_player->position()/1000) << std::endl;
+    ui->playingTrack->setMaximum(_player->duration()/1000);
+    ui->playingTrack->setValue((int)_player->position()/1000);
     ui->currentTime->setText(convertTime(_player->position()/1000));
     ui->endTime->setText(convertTime(_player->duration()/1000));
-//    ui->playingTrack->setTickPosition(_player->position()/1000);
+//    std::cout << _player->duration() << std::endl;
 }
 
 void Widget::setVolume(int value)
@@ -77,8 +89,16 @@ void Widget::setVolume(int value)
 
 void Widget::audioLoop(QMediaPlayer::MediaStatus status)
 {
+
     if (status == QMediaPlayer::EndOfMedia)
+    {
+        if (!_playlist[_index + 1])
+        {
+            ui->btnPlay->setText("Play");
+            _playState = -1;
+        }
         btnNext();
+    }
 }
 
 void Widget::setAudio(QModelIndex index)
@@ -97,8 +117,6 @@ void Widget::setDefault()
     _playState = -1;
 }
 
-
-
 void Widget::btnPlay()
 {
     if (!_playlist[_index]) return;
@@ -114,14 +132,15 @@ void Widget::btnPlay()
     {
         case 0:
         //    _player->duration() = _playlist[_index]->item.duration;
+
             ui->btnPlay->setText("Pause");
             _playState = 1;
-
             _player->play();
-            qDebug() << convertTime(_player->duration()/1000);
-//            ui->endTime->setText(convertTime(_player->duration()/1000));
-//            ui->progressBar->setRange(0, _player->duration()/1000);
-//            ui->playingTrack->setMaximum(_player->duration()/1000);
+//            std::cout << _player->duration() << std::endl;
+//            QDebug() << QString::number(_player->duration() / 1000);
+//            ui->playingTrack->setMaximum((int)(_player->duration()/1000));
+//            qDebug() << (_player->duration());
+
             break;
 
         case 1:
@@ -129,7 +148,7 @@ void Widget::btnPlay()
             _player->pause();
             _playState = 0;
             ui->btnPlay->setText("Play");
-
+//            std::cout << _player->duration() << std::endl;
             break;
 
         default:
@@ -142,8 +161,8 @@ void Widget::btnNext()
 {
     if (!_playlist[_index + 1])
     {
-        _playState = -1;
-        ui->btnPlay->setText("Play");
+//        _playState = -1;
+//        ui->btnPlay->setText("Play");
         return;
     }
     _index++;
@@ -161,6 +180,23 @@ void Widget::btnPrev()
 //    qDebug() << _player->errorString() << _playlistModel->rowCount();
 }
 
+void Widget::addDefaultTracks()
+{
+    QDir dir("../audioPlayer/tracks");
+    dir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
+    dir.setSorting(QDir::Size | QDir::Reversed);
+    QFileInfoList list = dir.entryInfoList();
+    for (int i = 0; i < list.count(); i++) {
+        QFileInfo fileInfo = list.at(i);
+        QList<QStandardItem *> items;
+        items.append(new QStandardItem(fileInfo.fileName()));
+        items.append(new QStandardItem(fileInfo.absoluteFilePath()));
+        _playlistModel->appendRow(items);
+        _playlist.push_back(fileInfo.absoluteFilePath());
+//        qDebug() << QString("%1 %2").arg(fileInfo.fileName()).arg(fileInfo.absoluteFilePath());
+    }
+}
+
 void Widget::btnAddClicked()
 {
     QStringList files = QFileDialog::getOpenFileNames(this, tr("Open File"), QString(), tr("Audio Files (*.mp3)"));
@@ -170,6 +206,6 @@ void Widget::btnAddClicked()
         items.append(new QStandardItem(QDir(filepath).dirName()));
         items.append(new QStandardItem(filepath));
         _playlistModel->appendRow(items);
-        _playlist.push_back(QDir(filepath).absolutePath(), 30000);
+        _playlist.push_back(QDir(filepath).absolutePath());
     }
 }

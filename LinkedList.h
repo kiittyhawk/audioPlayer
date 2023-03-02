@@ -6,7 +6,7 @@
 struct item
 {
   QString   path;
-  int       duration;
+//  int       duration;
 };
 
 class Node
@@ -17,9 +17,9 @@ public:
     Node *next;
 
 public:
-    Node(QString path, int duration)
+    Node(QString path)
     {
-        this->item.duration = duration;
+//        this->item.duration = duration;
         this->item.path = path;
         this->next = NULL;
         this->prev = NULL;
@@ -44,9 +44,9 @@ public:
             pop_front();
     }
 
-    Node *push_front(QString path, int duration)
+    Node *push_front(QString path)
     {
-        Node *ptr = new Node(path, duration);
+        Node *ptr = new Node(path);
         ptr->next = head;
         if (head != NULL)
             head->prev = ptr;
@@ -56,9 +56,9 @@ public:
         return ptr;
     }
 
-    Node *push_back(QString path, int duration)
+    Node *push_back(QString path)
     {
-        Node *ptr = new Node(path, duration);
+        Node *ptr = new Node(path);
         ptr->prev = tail;
         if (tail != NULL)
             tail->next = ptr;
@@ -116,15 +116,15 @@ public:
         return getAt(index);
     }
 
-    Node *insert(int index, QString path, int duration)
+    Node *insert(int index, QString path)
     {
         Node *right = getAt(index);
-        if (right == NULL) return push_back(path, duration);
+        if (right == NULL) return push_back(path);
 
         Node *left = right->prev;
-        if (left == NULL) return push_front(path, duration);
+        if (left == NULL) return push_front(path);
 
-        Node *ptr = new Node(path, duration);
+        Node *ptr = new Node(path);
         ptr->prev = left;
         ptr->next = right;
         left->next = ptr;

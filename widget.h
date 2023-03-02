@@ -20,6 +20,8 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     void setDefault();
+    void addDefaultTracks();
+
     ~Widget();
 
 private slots:
