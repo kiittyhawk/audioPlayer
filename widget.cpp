@@ -71,14 +71,12 @@ QString convertTime(qint64 seconds)
 
 void Widget::durationEmul()
 {
-//    std::time_t tt = static_cast<time_t>(_player->duration()/1000);
     if (!_playlist[_index] || _index == (uint32_t)-1) return;
-//    std::cout << static_cast<time_t>(_player->position()/1000) << std::endl;
+
     ui->playingTrack->setMaximum(_player->duration()/1000);
     ui->playingTrack->setValue((int)_player->position()/1000);
     ui->currentTime->setText(convertTime(_player->position()/1000));
     ui->endTime->setText(convertTime(_player->duration()/1000));
-//    std::cout << _player->duration() << std::endl;
 }
 
 void Widget::setVolume(int value)
@@ -131,24 +129,18 @@ void Widget::btnPlay()
     switch (_playState)
     {
         case 0:
-        //    _player->duration() = _playlist[_index]->item.duration;
 
             ui->btnPlay->setText("Pause");
             _playState = 1;
             _player->play();
-//            std::cout << _player->duration() << std::endl;
-//            QDebug() << QString::number(_player->duration() / 1000);
-//            ui->playingTrack->setMaximum((int)(_player->duration()/1000));
-//            qDebug() << (_player->duration());
 
             break;
 
         case 1:
-        //    std::cout << _player->position() << _pos << std::endl;
             _player->pause();
             _playState = 0;
             ui->btnPlay->setText("Play");
-//            std::cout << _player->duration() << std::endl;
+
             break;
 
         default:
@@ -160,15 +152,10 @@ void Widget::btnPlay()
 void Widget::btnNext()
 {
     if (!_playlist[_index + 1])
-    {
-//        _playState = -1;
-//        ui->btnPlay->setText("Play");
         return;
-    }
     _index++;
     setDefault();
     btnPlay();
-//    qDebug() << _player->errorString() << _playlistModel->rowCount();
 }
 
 void Widget::btnPrev()
@@ -177,7 +164,6 @@ void Widget::btnPrev()
     _index--;
     setDefault();
     btnPlay();
-//    qDebug() << _player->errorString() << _playlistModel->rowCount();
 }
 
 void Widget::addDefaultTracks()
@@ -193,7 +179,6 @@ void Widget::addDefaultTracks()
         items.append(new QStandardItem(fileInfo.absoluteFilePath()));
         _playlistModel->appendRow(items);
         _playlist.push_back(fileInfo.absoluteFilePath());
-//        qDebug() << QString("%1 %2").arg(fileInfo.fileName()).arg(fileInfo.absoluteFilePath());
     }
 }
 
