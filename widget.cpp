@@ -182,7 +182,7 @@ void Widget::btnPrev()
 
 void Widget::addDefaultTracks()
 {
-    QDir dir("../audioPlayer/tracks");
+    QDir dir("./tracks");
     dir.setFilter(QDir::Files | QDir::Hidden | QDir::NoSymLinks);
     dir.setSorting(QDir::Size | QDir::Reversed);
     QFileInfoList list = dir.entryInfoList();
